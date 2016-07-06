@@ -33,7 +33,7 @@ body#tinymce {
 }
 
 #main>div>.card-frame {
-    min-height: 1000px;
+    // min-height: 1000px;
     background: #fff;
 }
 
@@ -132,11 +132,13 @@ h2 {
 #Home {
   overflow: inherit;
 }
+
+
 #main {
   font-size: 1.1em;
   clear: both;
   padding:80px 1% 0px;
-  max-width: 1260px;
+  max-width: $max-page-width;
   margin: 0 auto;
   >.card-frame {
     border-radius: 0;
@@ -190,6 +192,7 @@ h2 {
 
 }
 body.home-layout #main {
+  padding:66px 0px 0px;
   > .card-content {
     .SELF-wikirate_infographic {
       text-align: center;
@@ -262,33 +265,52 @@ body.home-layout #main {
   }
 }
 
-body > .SELF-wikirate_footer {
-  clear: both;
-  display: block;
-  padding: 0;
-  // text-align: center;
-  font-size: 0.9em;
-  // background: #fff;
-  // border: 1px solid #e5e5e5;
-  a.external-link {
-    padding-right: 0 !important;
-    background: inherit !important;
+body {
+  >#wikirate_footer_compact {
+    position: fixed;
+    bottom: 0px;
+    z-index: 1;
+    background: #fff;
+    border-top: 1px solid #eaeaea;
+    width: 100%;
+    color: #999;
+    small {
+      width: 100%;
+      display: inherit;
+      text-align: center;
+    }
+    a {
+      color: #999;
+      text-decoration: underline;
+    }
   }
-  [class*="SELF-logo_"] {
-    display: inline-block;
-  }
-
-}
-
-body > .SELF-wikirate_footer .navbar {
-  margin-bottom: 0px;
-  .wagn-link a {
-    padding: 6px 20px;
-    &:hover {
-      background: none;
+  >.SELF-wikirate_footer, .SELF-wikirate_footer_compact{
+      clear: both;
+      display: block;
+      padding: 0;
+      // text-align: center;
+      font-size: 0.9em;
+      // background: #fff;
+      // border: 1px solid #e5e5e5;
+      a.external-link {
+        padding-right: 0 !important;
+        background: inherit !important;
+      }
+      [class*="SELF-logo_"] {
+        display: inline-block;
+      }
+    .navbar {
+      margin-bottom: 0px;
+      .wagn-link a {
+        padding: 6px 20px;
+        &:hover {
+          background: none;
+        }
+      }
     }
   }
 }
+
 
 #Donate input[type='image'] {
     width: auto;
@@ -304,4 +326,7 @@ body > .SELF-wikirate_footer .navbar {
     width: 100%;
 }
 
-
+.TYPE-image.card-content img, .TYPE-image .card-body img {
+    max-width: 100%;
+    max-height: 100%;
+}
