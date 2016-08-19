@@ -19,6 +19,7 @@ event :import_csv, :prepare_to_store,
     end
     handle_import_errors metric_value_card
   end
+  # binding.pry
   clear_slot_params
   handle_redirect
 end
@@ -69,8 +70,8 @@ end
 def parse_metric_value import_data, source_map
   args = process_metric_value_data import_data
   process_source args, source_map
-  ensure_company_exists args[:company]
   return unless valid_value_data? args
+  return unless ensure_company_exists args[:company], args
   return unless (create_args = construct_value_args args)
   check_duplication_in_subcards create_args[:name], args[:row]
   return if check_duplication_with_existing create_args[:name], args[:source]
@@ -141,8 +142,7 @@ def valid_value_data? args
     add_import_error "#{field} missing", args[:row] if args[field.to_sym].blank?
   end
   { metric: MetricID,
-    year: YearID,
-    company: WikirateCompanyID }.each_pair do |type, type_id|
+    year: YearID }.each_pair do |type, type_id|
     msg = check_existence_and_type(args[type], type_id, type)
     add_import_error msg, args[:row]
   end
@@ -205,9 +205,15 @@ def check_existence_and_type name, type_id, type_name=nil
   return "#{name} is not a #{type_name}" if Card[name].type_id != type_id
 end
 
-def ensure_company_exists company
-  return if Card[company]
-  Card.create name: company, type_id: WikirateCompanyID
+def ensure_company_exists company, args
+  if Card.exists?(company)
+    return if Card[company].type_id == WikirateCompanyID
+    msg = "#{company} is not in company type"
+    add_import_error msg, args[:row]
+  else
+    add_subcard company, type_id: WikirateCompanyID
+  end
+  @import_errors.empty?
 end
 
 def csv_rows
